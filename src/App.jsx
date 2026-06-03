@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { ScrollTrigger } from './utils/gsap'
 import { useCursor } from './hooks/useCursor'
 import { useScrollProgress } from './hooks/useScrollProgress'
@@ -7,14 +7,15 @@ import Preloader from './components/Preloader/Preloader'
 import Cursor from './components/Cursor/Cursor'
 import Nav from './components/Nav/Nav'
 import Hero from './components/Hero/Hero'
-import Marquee from './components/Marquee/Marquee'
-import Work from './components/Work/Work'
-import About from './components/About/About'
-import HorizontalScroll from './components/HorizontalScroll/HorizontalScroll'
-import Process from './components/Process/Process'
-import Testimonial from './components/Testimonial/Testimonial'
-import CTA from './components/CTA/CTA'
-import Footer from './components/Footer/Footer'
+
+const Marquee = lazy(() => import('./components/Marquee/Marquee'))
+const Work = lazy(() => import('./components/Work/Work'))
+const About = lazy(() => import('./components/About/About'))
+const HorizontalScroll = lazy(() => import('./components/HorizontalScroll/HorizontalScroll'))
+const Process = lazy(() => import('./components/Process/Process'))
+const Testimonial = lazy(() => import('./components/Testimonial/Testimonial'))
+const CTA = lazy(() => import('./components/CTA/CTA'))
+const Footer = lazy(() => import('./components/Footer/Footer'))
 
 export default function App() {
   const [contentReady, setContentReady] = useState(false)
@@ -48,15 +49,19 @@ export default function App() {
         <Nav />
         <main>
           <Hero ready={contentReady} />
-          <Marquee />
-          <Work />
-          <About />
-          <HorizontalScroll />
-          <Process />
-          <Testimonial />
-          <CTA />
+          <Suspense fallback={null}>
+            <Marquee />
+            <Work />
+            <About />
+            <HorizontalScroll />
+            <Process />
+            <Testimonial />
+            <CTA />
+          </Suspense>
         </main>
-        <Footer />
+        <Suspense fallback={null}>
+          <Footer />
+        </Suspense>
       </div>
     </>
   )

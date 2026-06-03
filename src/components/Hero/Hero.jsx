@@ -1,10 +1,26 @@
-import { lazy, Suspense, useLayoutEffect, useRef } from 'react'
+import { lazy, Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { gsap } from '../../utils/gsap'
 
 const ParticleField = lazy(() => import('./ParticleField'))
 
 export default function Hero({ ready }) {
   const root = useRef(null)
+  const [showParticles, setShowParticles] = useState(false)
+
+  useEffect(() => {
+    if (!ready) return undefined
+    const canRenderParticles = window.matchMedia('(min-width: 761px)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (!canRenderParticles) return undefined
+
+    const load = () => setShowParticles(true)
+    const idle = window.requestIdleCallback?.(load, { timeout: 1200 })
+    const fallback = idle ? undefined : window.setTimeout(load, 700)
+
+    return () => {
+      if (idle) window.cancelIdleCallback?.(idle)
+      if (fallback) window.clearTimeout(fallback)
+    }
+  }, [ready])
 
   useLayoutEffect(() => {
     if (!ready) return undefined
@@ -18,9 +34,11 @@ export default function Hero({ ready }) {
   return (
     <section id="top" className="relative grid min-h-svh items-center overflow-hidden px-[max(24px,7vw)] pb-24 pt-44 max-[760px]:pt-36" ref={root}>
       <div className="absolute inset-0 bg-black opacity-80">
-        <Suspense fallback={null}>
-          <ParticleField />
-        </Suspense>
+        {showParticles && (
+          <Suspense fallback={null}>
+            <ParticleField />
+          </Suspense>
+        )}
       </div>
       <div className="relative z-[1] max-w-[900px]">
         <p className="section-kicker" data-hero-reveal>Luxury digital atelier</p>
