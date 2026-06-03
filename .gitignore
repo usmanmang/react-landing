@@ -1,5 +1,8 @@
 node_modules/
 dist/
+AGENTS.md
+opencode.json
+opencode/
 .DS_Store
 *.local
 npm-debug.log*
