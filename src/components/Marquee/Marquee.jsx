@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef } from 'react'
-import { gsap } from '../../utils/gsap'
+import { gsap, ScrollTrigger } from '../../utils/gsap'
 
 const items = ['Strategy', 'Identity', 'WebGL', 'Editorial Design', 'React Systems', 'Launch Campaigns']
 
@@ -7,7 +7,26 @@ export default function Marquee() {
   const root = useRef(null)
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.to('[data-marquee-track]', { xPercent: -50, duration: 24, repeat: -1, ease: 'none' })
+      const marquee = gsap.to('[data-marquee-track]', {
+        xPercent: -50,
+        duration: 24,
+        repeat: -1,
+        ease: 'none',
+      })
+
+      ScrollTrigger.create({
+        trigger: root.current,
+        start: 'top bottom',
+        end: 'bottom top',
+        onUpdate: (self) => {
+          gsap.to(marquee, {
+            timeScale: self.direction,
+            duration: 0.45,
+            ease: 'power2.out',
+            overwrite: true,
+          })
+        },
+      })
     }, root)
     return () => ctx.revert()
   }, [])
