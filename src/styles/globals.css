@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply bg-black text-off-white;
+    scroll-behavior: auto;
+  }
+
+  body {
+    @apply m-0 min-w-80 overflow-x-hidden bg-black font-body text-off-white;
+    cursor: none;
+  }
+
+  a {
+    @apply text-inherit no-underline;
+  }
+
+  button {
+    font: inherit;
+    cursor: none;
+  }
+
+  img,
+  svg,
+  canvas {
+    @apply block max-w-full;
+  }
+
+  ::selection {
+    @apply bg-gold text-black;
+  }
+
+  :focus-visible {
+    @apply outline outline-2 outline-offset-4 outline-gold-light;
+  }
+
+  @media (pointer: coarse) {
+    body,
+    button {
+      cursor: auto;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      scroll-behavior: auto !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .section-kicker {
+    @apply text-[0.78rem] uppercase tracking-[0.22em] text-gold;
+  }
+
+  .display-title {
+    @apply m-0 font-display text-[clamp(2.8rem,7vw,7.4rem)] leading-[0.9] tracking-[-0.07em];
+  }
+
+  .serif {
+    @apply font-serif font-normal italic text-gold-light;
+  }
+
+  .btn {
+    @apply relative isolate inline-flex min-h-12 items-center justify-center overflow-hidden rounded-full border border-gold px-[1.35rem] text-off-white transition-colors duration-300 ease-expo before:absolute before:inset-0 before:-z-10 before:origin-left before:scale-x-0 before:bg-gold before:transition-transform before:duration-500 before:ease-expo hover:text-black hover:before:scale-x-100;
+  }
+
+  .btn.filled {
+    @apply bg-gold text-black;
+  }
+}
